@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+一、VMware 安装 Centos7 超详细过程
+   a.进入CentOS下载官网;
+   b.CentOS7的安装;
+     1.选择安装的系统是否含有界面;
+     2.配置分区;
+     3.开启网卡且配置固定IP;
+     相关资料:
+	https://www.runoob.com/w3cnote/vmware-install-centos7.html
+	https://blog.csdn.net/babyxue/article/details/80970526
+二.Xshell连接Linux
+      对Linux的要求
+   1.创建基本的可以试验环境
+	  a.配置固定IP
+	  b.关闭防火墙
+	  c.关闭selinux
+	  d.光盘自动挂载
+	  e.配置本地yum源
+       相关资料:
+	  https://blog.csdn.net/qq_29393273/article/details/83625889
+	  
+   2.Xshell连接Linux失败解决方案
+    a.查看Xshell的IP地址是否和Linux系统的IP是否一致;
+    b.查看Xshell中的用户名和密码是否一致;
+    c.检查SSH服务是否开启;
+      https://zhuanlan.zhihu.com/p/84936180
+    d.检查Linux的防火墙是否关闭;
+    e.检查宿主机和虚拟机是否处于同一网段(Linux系统的Ip前三位要和宿主机的相同）
+   3.第三方yum源不可用解决方案;
+            将yum源改成本地源，从本地源中寻找RPM包进行安装。
+   
+       相关资料
+    https://weibo.com/ttarticle/p/show?id=2309404612506969833576#_loginLayer_1627539149315
+    4.在VM中使用YUM安装Docker;
+     a.本地yum源中没有Docker的安装包;
+               解决方案：下载对应的rpm包
+                 https://www.cnblogs.com/faithH/p/11943959.html
+     b.
+	</body>
+</html>
