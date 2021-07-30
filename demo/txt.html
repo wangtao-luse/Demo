@@ -33,16 +33,19 @@
       https://zhuanlan.zhihu.com/p/84936180
     d.检查Linux的防火墙是否关闭;
     e.检查宿主机和虚拟机是否处于同一网段(Linux系统的Ip前三位要和宿主机的相同）
-   3.第三方yum源不可用解决方案;
+   3.VM桥接模式下Linux不能Ping通外网解决方案:
+     a.https://blog.csdn.net/csdnmhr/article/details/96975492
+     b.
+   4.第三方yum源不可用解决方案;
             将yum源改成本地源，从本地源中寻找RPM包进行安装。
    
        相关资料
     https://weibo.com/ttarticle/p/show?id=2309404612506969833576#_loginLayer_1627539149315
-    4.在VM中使用YUM安装Docker;
+    5.在VM中使用YUM安装Docker;
      a.本地yum源中没有Docker的安装包;
                解决方案：下载对应的rpm包
                  https://www.cnblogs.com/faithH/p/11943959.html
-    5.MySQL数据库同步解决方案:
+    6.MySQL数据库同步解决方案:
       a.SyncNavigator 数据同步工具 
         https://blog.csdn.net/weixin_37691493/article/details/83986435
       b.mysqldump命令备份数据
@@ -55,5 +58,9 @@
       https://blog.csdn.net/alangmei/article/details/21075055
       f.定时备份
       https://blog.csdn.net/testcs_dn/article/details/48829785
+      
+      定时器:
+      https://www.cnblogs.com/shihaiming/p/10469157.html
+      
 	</body>
 </html>
