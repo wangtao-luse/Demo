@@ -32,6 +32,112 @@
 				animation: slideInUp .2s;
 			}
 		</style>
+		<style>
+			.article-nav-wrap{
+				padding: 0px;
+				max-height: 400px;
+				white-space:nowrap;
+				overflow-x: hidden;
+				overflow-y: auto;
+				text-overflow: ellipsis;
+				
+				
+			}
+
+			
+			.article-nav-header{
+			    display: -webkit-box;
+			    display: -ms-flexbox;
+			    display: flex;
+			    -webkit-box-pack: justify;
+			    -ms-flex-pack: justify;
+			    justify-content: space-between;
+			    -webkit-box-align: center;
+			    -ms-flex-align: center;
+			    align-items: center;
+			    height: 50px;
+			    padding: 0 20px;
+			    border-bottom: 1px solid #f6f6f6;
+			    -webkit-box-sizing: border-box;
+			    box-sizing: border-box;
+			}
+			.card-headerText{
+				font-weight: 600;
+			}
+			.article-nav-list{
+				padding: 20px 0px 20px 20px;
+				
+			}
+			.list-group-item{
+				display: block;
+				color: #212529;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				max-width: 259px;
+				font-size: 14px;
+				height: 24px;
+				line-height: 24px;
+			}
+			.list-group-item:hover{
+				color: #0084ff;
+				background-color: rgba(0,132,255,0.1);
+			}
+			.list-group-item.active{
+				color:#0084ff;
+			}
+			.article-nav-list .nav2 {
+			    padding: 0.25rem 1.5rem;
+			}
+			.article-nav-list .text-primary{
+				font-weight: bold;
+			}
+		</style>
+		<style>
+			/**
+			 * 分类专栏
+			 */
+			.recommend-person-head{
+				    padding: 0 20px;
+				    height: 50px;
+				    line-height: 50px;
+				    -webkit-box-sizing: border-box;
+                    box-sizing: border-box;
+                    border-bottom: 1px solid #f6f6f6;
+			}
+			.kind_person_column{} 
+			.recomment-person-ctn{
+				padding: 12px 16px 16px 16px;
+				overflow: hidden;
+			}.recomment-person-ctn *{
+				word-wrap: break-word;
+			}
+			.recomment-person-ctn .title .text{
+				max-width: 155px;
+			    display: block;
+			    overflow: hidden;
+			    text-overflow: ellipsis;
+			    white-space: nowrap;
+			    float: left;
+			    margin-right: 8px;
+			    font-size: 14px;
+			    color: #555666;;
+			}
+			.recomment-person-ctn ul li{
+				cursor: pointer;
+				margin-top:16px ;
+			}
+			.recomment-person-ctn ul li a{
+				
+			}
+			.recomment-person-ctn ul li a span.count{
+				max-width: 42px;
+				font-size: 12px;
+                color: #999aaa;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+			}
+		</style>
 		<script>
 			$(function(){
 				//获取指定元素在y轴上偏移量
@@ -684,6 +790,122 @@
 								<img src="../../img/itour/common/qrcode.jpg" class="wechat-scan" width="96" /> "爱旅行SHOW",提供最优旅行攻略，让旅行变得简单, 有趣！
 							</div>
 						</div>
+					    <div class="card article-nav-wrap" id="collapseTarget">
+							<div class="article-nav-header">
+								<div class="card-headerText">文章导航</div>
+							</div>
+							<nav class="article-nav-list">
+								<a class="list-group-item text-primary active"href="#item-1">为什么会出现Docker?</a>
+								<a class="list-group-item text-primary"href="#item-2">什么是Docker？</a>
+								<a class="list-group-item text-primary"href="#item-3">Docker与虚拟机的区别</a>
+								<a class="list-group-item nav2"href="#item-3-1">虚拟机技术</a>
+								<a class="list-group-item nav2"href="#item-3-2">虚拟机技术的优点</a>
+								<a class="list-group-item nav2"href="#item-3-3">虚拟机技术的缺点</a>
+								<a class="list-group-item nav2"href="#item-3-4">Docker容器技术</a>
+								<a class="list-group-item nav2"href="#item-3-5">Docker容器技术的优点</a>
+								<a class="list-group-item nav2"href="#item-3-6">Docker容器技术缺点</a>
+								<a class="list-group-item nav2"href="#item-3-7">区别总结</a>
+								<a class="list-group-item text-primary"href="#item-4">Docker的设计理念</a>
+								<a class="list-group-item text-primary"href="#item-5">Docker能做什么？</a>
+								<a class="list-group-item text-primary"href="#item-6" title="为什么要使用功能Docker？Docker有哪些优势？">为什么要使用功能Docker？Docker有哪些优势？</a>
+							</nav>
+						</div>
+					    <div class="card recommend-person-wrap">
+					    	<div class="recommend-person-head">
+					    		<div class="recommed-right-titel card-headerText">分类专栏</div>
+					    	</div>
+					    	<div class="kind_person_column">
+					    		<div class="recomment-person-ctn">
+					    			<ul>
+					    			  <li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Docker</span></span>
+					    			  	 <span class="count fr">5篇</span>
+					    			    </a>
+					    			  </li>
+					    			  <li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Java</span></span>
+					    			  	 <span class="count fr">8篇</span>
+					    			    </a>
+					    			  </li>
+					    			  <li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li>
+					    			  <li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li>
+					    			  <li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li><li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li><li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li><li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li><li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li><li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li><li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li><li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li><li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li><li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li><li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li><li>
+					    			  	<a class="clearfix" target="_blank">
+					    			  	 <span class="title oneline"><span class="text">Springboot</span></span>
+					    			  	 <span class="count fr">1000篇</span>
+					    			    </a>
+					    			  </li>
+					    			</ul>
+					    		</div>
+					    	</div>
+					    </div>
 					</div>
 				</div>
 			</div>

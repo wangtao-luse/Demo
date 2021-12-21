@@ -18,6 +18,104 @@
 					watch:true//关闭实时预览
 					
 				});
+				//标签checkbox检查
+				$(document).on("change",".mark_selection_box .tag__option-label",function(e){
+				  var checked = $(".mark_selection_box .tag__option-chk:checked");
+				  var uncheked = $(".mark_selection_box .tag__option-chk:not(:checked)");
+				  var check = $(this).find(".tag__option-chk").is(':checked')
+				  var clen =checked.length;
+				  var ulen =uncheked.length;
+				  var text = $(this).find(".spanIsAgree").text();
+				  var tagList = $(".mark_selection .mark_selection_title_el_tag .el-tag");
+				  if(clen>=5){				  	
+				  	uncheked.prop("disabled","disabled");
+				  }else{
+				  	uncheked.prop("disabled","");
+				  }
+				  if(tagList.length<5 && check){
+				  	 appendTag(text,$(this));
+				  }
+				  if(!check){
+				  	tagList.each(function(i,item){
+				  		var tag =$(this).text().trim();
+				  		if(tag==text){
+				  			$(this).remove();
+				  		}
+				  	})
+				  }
+				 var nlen = $(".mark_selection .mark_selection_title_el_tag .el-tag");
+				 if(nlen.length>4){
+				  	 uncheked.prop("disabled","disabled");
+				  	 $(".mark_selection .tag__btn-tag").hide();
+				  }else{
+				  	$(".mark_selection .tag__btn-tag").show();
+				  }
+				});
+				$(".mod-dialog-close,.modal__button-bar .btn-cancel").click(function(){
+					$(".modal-dialog-wrapper").hide();
+				});
+				$(".mark_selection .mark_selection_title_el_tag").click(function(){
+					$(".mark_selection .mark_selection_box").show();
+				});
+				//话题相关
+				$(".mark_selection .mark_selection_title_el_tag").click(function(){
+					$(".mark_selection .mark_selection_box").show();
+				});
+				$(".mark_selection .modal__close-button.tag-close-btn").click(function(){
+					$(".mark_selection .mark_selection_box").hide();
+				});
+				$(document).on("keyup",".mark_selection_box_header .el-input__inner",function(ev){
+					if(ev.keyCode==13) {
+						var tag =$(this).val();
+						var chlid_len = $(".mark_selection .mark_selection_title_el_tag span>span").length;
+						
+						if(chlid_len<5){
+							$(".mark_selection .tag__btn-tag").show();
+							appendTag(tag,$(this));
+							$(".mark_selection .tag__option-label").each(function(i,item){
+								var text = $(this).find(".spanIsAgree").text().trim();
+								if(tag==text){
+									$(this).find(".tag__option-chk").prop("checked","checked");
+								}
+							})
+						}
+						if(chlid_len>=4){
+							var uncheked = $(".mark_selection_box .tag__option-chk:not(:checked)");
+							uncheked.prop("disabled","disabled");
+							$(".mark_selection .tag__btn-tag").hide();
+						}
+						
+					}
+				}); 
+				$(document).on("click",".mark_selection .el-tag__close.el-icon-close",function(){
+					$(this).parent().remove();
+					var chlid_len = $(".mark_selection .mark_selection_title_el_tag span>span").length;
+					var text = $(this).parent().text().trim();
+					var uncheked = $(".mark_selection_box .tag__option-chk:not(:checked)");
+					if(chlid_len<5){
+						$(".mark_selection .tag__btn-tag").show();
+						uncheked.prop("disabled","");
+						$(".mark_selection .tag__option-label").each(function(i,item){
+							var tag = $(this).find(".spanIsAgree").text().trim();
+							if(tag==text){
+								$(this).find(".tag__option-chk").prop("checked","");
+							}
+						})
+					}
+				})
+				//追加标签
+				function appendTag(tag,$that){
+					var len = $(".mark_selection .mark_selection_title_el_tag span").length;
+					if(len<=0){
+						 $($that).closest(".modal-dialog-wrapper").find(".mark_selection .mark_selection_title_el_tag .tag__btn-tag").before("<span></span>");
+					}
+				var html="<span class='el-tag el-tag--light mark_selection_box_el_tag '>"+tag+"<i class='el-tag__close el-icon-close'></i></span>";
+				  $($that).closest(".modal-dialog-wrapper").find(".mark_selection .mark_selection_title_el_tag>span").append(html);
+				}
+				$(".mod-dialog-close,.modal__button-bar .btn-cancel").click(function(){
+					$(".modal-dialog-wrapper").hide();
+				});
+				
 				$(".tag__box .tag__btn-tag").click(function(){
 					var tlen = $(".tag__box .tag__item-list .tag__item-box").length;
 					if(tlen<3){
@@ -26,10 +124,19 @@
 					$(".tag__item-box .tag-input-text").focus();
 				})
 				$(document).on("click",".tag__item-box .tag__btn-tag-delete",function(){
+				   var text = $(this).parent().find(".tag__name").text().trim();
 				   $(this).parent().remove();
 				   var tlen = $(".tag__box .tag__item-list .tag__item-box").length;
+				    var uncheked = $(".tag__box .tag__option-chk:not(:checked)");
 					if(tlen<3){
 						$(".tag__box .tag__btn-tag").show();
+						uncheked.prop("disabled","");
+						$(".tag__box .tag__option-label").each(function(i,item){
+							var tag = $(this).find(".spanIsAgree").text().trim();
+							if(text==tag){
+								$(this).find(".tag__option-chk").prop("checked","");
+							}
+						})
 					}
 				})
 				$(document).on("keyup",".input-text-box .tag-input-text",function(){
@@ -46,22 +153,51 @@
 					if(!v){
 					 $(this).closest(".tag__item-box").remove();	
 					}
+					//checkbox控制
+					$(".tag__box .tag__option-label").each(function(i,item){
+						var text = $(this).find(".spanIsAgree").text().trim();
+						if(v==text){
+							$(this).find(".tag__option-chk").prop("checked","checked");
+						}
+					});
+					
 					$(this).parent().remove();
 					var tlen = $(".tag__box .tag__item-list .tag__item-box").length;
 					if(tlen>=3){
+						var uncheked = $(".tag__box .tag__option-chk:not(:checked)");
+							uncheked.prop("disabled","disabled");
 						$(".tag__box .tag__btn-tag").hide();
+						
 					}
 				});
-				$(document).on("click",".tag__box .tag__option-icon",function(){
+				$(document).on("change",".tag__box .tag__option-label",function(e){
 				  var checked = $(".tag__box .tag__option-chk:checked");
-				  var uncheked =$(".tag__box .tag__option-chk:not(:checked)");
+				  var uncheked = $(".tag__box .tag__option-chk:not(:checked)");
+				  var check = $(this).find(".tag__option-chk").is(':checked')
 				  var clen =checked.length;
 				  var ulen =uncheked.length;
-				  if(clen>=3){//大于规定选择个数disabled为选择的chekbox
+				  var text = $(this).find(".spanIsAgree").text();
+				  var tagList = $(".tag__box .tag__item-list .tag__item-box");
+				  if(clen>=3){				  	
 				  	uncheked.prop("disabled","disabled");
-				  	
+				  }else{
+				  	uncheked.prop("disabled","");
 				  }
-				  
+				  if(tagList.length<3 && check){
+				  	 appendCheckboxCol(text);
+				  }
+				  if(!check){
+				  	tagList.each(function(i,item){
+				  		var tag =$(this).find(".tag__name").text().trim();
+				  		if(tag==text){
+				  			$(this).remove();
+				  		}
+				  	})
+				  }
+				 var nlen= $(".tag__box .tag__item-list .tag__item-box").length;
+				 if(nlen>2){
+				  	 uncheked.prop("disabled","disabled");
+				  }
 				});
 				
 			});
@@ -77,6 +213,18 @@
 								+"</svg>"
 							+"</button>"
 						+"</div>";
+			$(".tag__box .tag__btn-tag").before(html);
+			}
+			function appendCheckboxCol(text){
+				var html="<div class='tag__item-box'>"
+				            +"<span contenteditable='false' class='tag__name' style='display:block'>"+text+"</span>"
+							+"<button class='tag__btn-tag-delete'>"
+								+"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' class='icon'>"
+									+"<path d='M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z'></path>"
+								+"</svg>"
+							+"</button>"
+						+"</div>";
+			
 			$(".tag__box .tag__btn-tag").before(html);
 			}
 		</script>
@@ -828,6 +976,81 @@
 		    right: 6px;
 		    top: 14px;
 		}
+		.mark_selection .mark_selection_box_el_tag {
+		    background: rgba(38,125,204,.05);
+		    border-radius: 4px;
+		    border: 1px solid rgba(38,125,204,.2);
+		    height: 28px;
+		    font-size: 14px;
+		    line-height: 26px;
+		    margin-right: 8px;
+		    padding: 0 8px;
+		    background-color: #fff;
+		}
+		.mark_selection .mark_selection_title_el_tag .mark_selection_box_el_tag {
+		    color: #267dcc;
+		    background: rgba(38,125,204,.05);
+		}
+		.el-tag {
+		    background-color: #ecf5ff;
+		    border: 1px solid #d9ecff;
+		    display: inline-block;
+		    height: 32px;
+		    padding: 0 10px;
+		    line-height: 30px;
+		    font-size: 12px;
+		    color: #409eff;
+		    border-radius: 4px;
+		    box-sizing: border-box;
+		    white-space: nowrap;
+		}
+		.el-tag .el-icon-close {
+			display: inline-block;
+		    border-radius: 50%;
+		    text-align: center;
+		    position: relative;
+		    cursor: pointer;
+		    font-size: 12px;
+		    height: 16px;
+		    width: 16px;
+		    line-height: 16px;
+		    vertical-align: middle;
+		    top: -1px;
+		    right: -5px;
+		}
+		.el-icon-close:before {
+		    content: "";
+		    width: 10px;
+		    height: 1px;
+		    background-color: #3485cf;
+		    position: absolute;
+		    left: 50%;
+		    top: 50%;
+		    margin-left: -5px;
+		    -webkit-transform-origin: 50% 50%;
+		    transform-origin: 50% 50%;
+		    transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+		    -ms-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+		    -webkit-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+		}
+		.el-icon-close:after {
+		    content: "";
+		    width: 10px;
+		    height: 1px;
+		    background-color: #3485cf;
+		    position: absolute;
+		    left: 50%;
+		    top: 50%;
+		    margin-left: -5px;
+		    -webkit-transform-origin: 50% 50%;
+		    transform-origin: 50% 50%;
+		    transform: matrix(0.71, -0.71, 0.71, 0.71, 0, 0);
+		    -ms-transform: matrix(0.71, -0.71, 0.71, 0.71, 0, 0);
+		    -webkit-transform: matrix(0.71, -0.71, 0.71, 0.71, 0, 0);
+		}
+		.mark_selection .mark_selection_box_el_tag .el-tag__close {
+		    color: #3485cf;
+		}
 		.tag-span-box{
 			
 		}
@@ -978,86 +1201,230 @@
 												<div class="tag__option-box">
 													<label class="tag__option-label">
 														<input type="checkbox" class="tag__option-chk" value="Java"> 
-														<i for="chk01" class="tag__option-icon">
-													   		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024" class="icon"><path d="M768 0H256C115.2 0 0 115.2 0 256v512c0 140.8 115.2 256 256 256h512c140.8 0 256-115.2 256-256V256c0-140.8-115.2-256-256-256z m17.6 377.6L460.8 728c-9.6 9.6-27.2 14.4-40 14.4-14.4 0-32-3.2-41.6-14.4l-142.4-153.6c-17.6-19.2-17.6-49.6 0-68.8 17.6-19.2 46.4-19.2 64 0l120 128 300.8-324.8c17.6-19.2 46.4-19.2 64 0s17.6 49.6 0 68.8z" p-id="2164" fill="currentColor" data-spm-anchor-id="a313x.7781069.0.i4"></path></svg>
-														</i>
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">方法</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">构造函数</span>
+													</label>
+												</div>
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">匿名函数</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">静态类</span>
+													</label>
+												</div>
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">抽象类</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">接口</span>
+													</label>
+												</div>
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">变量</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">代码块</span>
+													</label>
+												</div>
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">PLSQL</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">fasjson 转换</span>
+													</label>
+												</div>
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
 														<span class="spanIsAgree">数据库</span>
 													</label>
 												</div>
+												
 												<div class="tag__option-box">
 													<label class="tag__option-label">
 														<input type="checkbox" class="tag__option-chk" value="Java"> 
-														<i for="chk01" class="tag__option-icon">
-													   		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024" class="icon"><path d="M768 0H256C115.2 0 0 115.2 0 256v512c0 140.8 115.2 256 256 256h512c140.8 0 256-115.2 256-256V256c0-140.8-115.2-256-256-256z m17.6 377.6L460.8 728c-9.6 9.6-27.2 14.4-40 14.4-14.4 0-32-3.2-41.6-14.4l-142.4-153.6c-17.6-19.2-17.6-49.6 0-68.8 17.6-19.2 46.4-19.2 64 0l120 128 300.8-324.8c17.6-19.2 46.4-19.2 64 0s17.6 49.6 0 68.8z" p-id="2164" fill="currentColor" data-spm-anchor-id="a313x.7781069.0.i4"></path></svg>
-														</i>
-														<span class="spanIsAgree">tomcat</span>
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">fasjson</span>
 													</label>
 												</div>
 												<div class="tag__option-box">
 													<label class="tag__option-label">
 														<input type="checkbox" class="tag__option-chk" value="Java"> 
-														<i for="chk01" class="tag__option-icon">
-													   		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024" class="icon"><path d="M768 0H256C115.2 0 0 115.2 0 256v512c0 140.8 115.2 256 256 256h512c140.8 0 256-115.2 256-256V256c0-140.8-115.2-256-256-256z m17.6 377.6L460.8 728c-9.6 9.6-27.2 14.4-40 14.4-14.4 0-32-3.2-41.6-14.4l-142.4-153.6c-17.6-19.2-17.6-49.6 0-68.8 17.6-19.2 46.4-19.2 64 0l120 128 300.8-324.8c17.6-19.2 46.4-19.2 64 0s17.6 49.6 0 68.8z" p-id="2164" fill="currentColor" data-spm-anchor-id="a313x.7781069.0.i4"></path></svg>
-														</i>
-														<span class="spanIsAgree">linux</span>
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">文件管理</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">mongodb</span>
 													</label>
 												</div>
 												<div class="tag__option-box">
 													<label class="tag__option-label">
 														<input type="checkbox" class="tag__option-chk" value="Java"> 
-														<i for="chk01" class="tag__option-icon">
-													   		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024" class="icon"><path d="M768 0H256C115.2 0 0 115.2 0 256v512c0 140.8 115.2 256 256 256h512c140.8 0 256-115.2 256-256V256c0-140.8-115.2-256-256-256z m17.6 377.6L460.8 728c-9.6 9.6-27.2 14.4-40 14.4-14.4 0-32-3.2-41.6-14.4l-142.4-153.6c-17.6-19.2-17.6-49.6 0-68.8 17.6-19.2 46.4-19.2 64 0l120 128 300.8-324.8c17.6-19.2 46.4-19.2 64 0s17.6 49.6 0 68.8z" p-id="2164" fill="currentColor" data-spm-anchor-id="a313x.7781069.0.i4"></path></svg>
-														</i>
-														<span class="spanIsAgree">html</span>
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">reids</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">缓存</span>
 													</label>
 												</div>
 												<div class="tag__option-box">
 													<label class="tag__option-label">
 														<input type="checkbox" class="tag__option-chk" value="Java"> 
-														<i for="chk01" class="tag__option-icon">
-													   		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024" class="icon"><path d="M768 0H256C115.2 0 0 115.2 0 256v512c0 140.8 115.2 256 256 256h512c140.8 0 256-115.2 256-256V256c0-140.8-115.2-256-256-256z m17.6 377.6L460.8 728c-9.6 9.6-27.2 14.4-40 14.4-14.4 0-32-3.2-41.6-14.4l-142.4-153.6c-17.6-19.2-17.6-49.6 0-68.8 17.6-19.2 46.4-19.2 64 0l120 128 300.8-324.8c17.6-19.2 46.4-19.2 64 0s17.6 49.6 0 68.8z" p-id="2164" fill="currentColor" data-spm-anchor-id="a313x.7781069.0.i4"></path></svg>
-														</i>
-														<span class="spanIsAgree">javaScript</span>
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">并发</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">多线程</span>
 													</label>
 												</div>
 												<div class="tag__option-box">
 													<label class="tag__option-label">
 														<input type="checkbox" class="tag__option-chk" value="Java"> 
-														<i for="chk01" class="tag__option-icon">
-													   		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024" class="icon"><path d="M768 0H256C115.2 0 0 115.2 0 256v512c0 140.8 115.2 256 256 256h512c140.8 0 256-115.2 256-256V256c0-140.8-115.2-256-256-256z m17.6 377.6L460.8 728c-9.6 9.6-27.2 14.4-40 14.4-14.4 0-32-3.2-41.6-14.4l-142.4-153.6c-17.6-19.2-17.6-49.6 0-68.8 17.6-19.2 46.4-19.2 64 0l120 128 300.8-324.8c17.6-19.2 46.4-19.2 64 0s17.6 49.6 0 68.8z" p-id="2164" fill="currentColor" data-spm-anchor-id="a313x.7781069.0.i4"></path></svg>
-														</i>
-														<span class="spanIsAgree">jquery</span>
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">文件上传</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">File</span>
 													</label>
 												</div>
 												<div class="tag__option-box">
 													<label class="tag__option-label">
 														<input type="checkbox" class="tag__option-chk" value="Java"> 
-														<i for="chk01" class="tag__option-icon">
-													   		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024" class="icon"><path d="M768 0H256C115.2 0 0 115.2 0 256v512c0 140.8 115.2 256 256 256h512c140.8 0 256-115.2 256-256V256c0-140.8-115.2-256-256-256z m17.6 377.6L460.8 728c-9.6 9.6-27.2 14.4-40 14.4-14.4 0-32-3.2-41.6-14.4l-142.4-153.6c-17.6-19.2-17.6-49.6 0-68.8 17.6-19.2 46.4-19.2 64 0l120 128 300.8-324.8c17.6-19.2 46.4-19.2 64 0s17.6 49.6 0 68.8z" p-id="2164" fill="currentColor" data-spm-anchor-id="a313x.7781069.0.i4"></path></svg>
-														</i>
-														<span class="spanIsAgree">PS笔记</span>
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">java8特性</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">javaEE</span>
 													</label>
 												</div>
 												<div class="tag__option-box">
 													<label class="tag__option-label">
 														<input type="checkbox" class="tag__option-chk" value="Java"> 
-														<i for="chk01" class="tag__option-icon">
-													   		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024" class="icon"><path d="M768 0H256C115.2 0 0 115.2 0 256v512c0 140.8 115.2 256 256 256h512c140.8 0 256-115.2 256-256V256c0-140.8-115.2-256-256-256z m17.6 377.6L460.8 728c-9.6 9.6-27.2 14.4-40 14.4-14.4 0-32-3.2-41.6-14.4l-142.4-153.6c-17.6-19.2-17.6-49.6 0-68.8 17.6-19.2 46.4-19.2 64 0l120 128 300.8-324.8c17.6-19.2 46.4-19.2 64 0s17.6 49.6 0 68.8z" p-id="2164" fill="currentColor" data-spm-anchor-id="a313x.7781069.0.i4"></path></svg>
-														</i>
-														<span class="spanIsAgree">pr学习比较</span>
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">打包项目到Linux</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">maven项目编译</span>
 													</label>
 												</div>
 												<div class="tag__option-box">
 													<label class="tag__option-label">
 														<input type="checkbox" class="tag__option-chk" value="Java"> 
-														<i for="chk01" class="tag__option-icon">
-													   		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024" class="icon"><path d="M768 0H256C115.2 0 0 115.2 0 256v512c0 140.8 115.2 256 256 256h512c140.8 0 256-115.2 256-256V256c0-140.8-115.2-256-256-256z m17.6 377.6L460.8 728c-9.6 9.6-27.2 14.4-40 14.4-14.4 0-32-3.2-41.6-14.4l-142.4-153.6c-17.6-19.2-17.6-49.6 0-68.8 17.6-19.2 46.4-19.2 64 0l120 128 300.8-324.8c17.6-19.2 46.4-19.2 64 0s17.6 49.6 0 68.8z" p-id="2164" fill="currentColor" data-spm-anchor-id="a313x.7781069.0.i4"></path></svg>
-														</i>
-														<span class="spanIsAgree">Java框架</span>
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">linux环境安装</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">svn提交</span>
+													</label>
+												</div>
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">linux文件下载</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">项目备份</span>
+													</label>
+												</div>
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">linux文件管理</span>
+													</label>
+												</div>
+												
+												<div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">git分支</span>
 													</label>
 												</div>
 											</div>
-											<button type="button" class="modal__close-button button">
+											<button type="button" class="modal__close-button tag-close-btn button">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg>
 											</button>
 											</div>
@@ -1101,27 +1468,200 @@
 														<i for="chk01" class="tag__option-icon"></i>
 														<span class="spanIsAgree">Java框架</span>
 													</label>
+												</div>
+												<div class="tag__option-box">
 													<label class="tag__option-label">
 														<input type="checkbox" class="tag__option-chk" value="Java"> 
 														<i for="chk01" class="tag__option-icon"></i>
-														<span class="spanIsAgree">数据库</span>
+														<span class="spanIsAgree">CSS</span>
 													</label>
+												</div><div class="tag__option-box">
 													<label class="tag__option-label">
 														<input type="checkbox" class="tag__option-chk" value="Java"> 
 														<i for="chk01" class="tag__option-icon"></i>
-														<span class="spanIsAgree">JavaScript</span>
+														<span class="spanIsAgree">HTML</span>
 													</label>
+												</div><div class="tag__option-box">
 													<label class="tag__option-label">
 														<input type="checkbox" class="tag__option-chk" value="Java"> 
 														<i for="chk01" class="tag__option-icon"></i>
 														<span class="spanIsAgree">Linux</span>
 													</label>
+												</div><div class="tag__option-box">
 													<label class="tag__option-label">
 														<input type="checkbox" class="tag__option-chk" value="Java"> 
 														<i for="chk01" class="tag__option-icon"></i>
-														<span class="spanIsAgree">PS学习笔记</span>
+														<span class="spanIsAgree">Mysql</span>
 													</label>
-												</div>												
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">eclipse</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">tomacat</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">springCloud</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">springboot</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">JQUERY</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">EasyUI</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">PS</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">PR</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">Java框架</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">Java框架</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">Java框架</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">虚拟机</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">Docker</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">javaScript</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">Java框架</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">页面设计</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">Spring</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">Hibernate</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">Mybatis</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">SpringMVC</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">Redis</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">jboss</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">ibeer</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">json</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">GIT</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">SVN</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">框架集成</span>
+													</label>
+												</div><div class="tag__option-box">
+													<label class="tag__option-label">
+														<input type="checkbox" class="tag__option-chk" value="Java"> 
+														<i for="chk01" class="tag__option-icon"></i>
+														<span class="spanIsAgree">Maven</span>
+													</label>
+												</div>
 											</div>
 										</div>
 									</div>
